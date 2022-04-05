@@ -55,7 +55,7 @@ class GroceryItemAPITestCase(APITestCase):
         response = self.client.get(grocery_item_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        item_data = {"name": "Potato Chips", "quantity": 1, "is_purchased": False}
+        item_data = {"id": item.id, "name": "Potato Chips", "quantity": 1, "is_purchased": False}
         self.assertEqual(response.data, item_data)
 
     def test_get_non_existant_item(self):

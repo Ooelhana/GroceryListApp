@@ -3,6 +3,8 @@ from .models import GroceryItem
 
 # Grocery Item Serializer
 class GroceryItemSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+
     class Meta:
         model = GroceryItem
-        fields = ["name", "quantity", "is_purchased"]
+        fields = ["id", "name", "quantity", "is_purchased"]
