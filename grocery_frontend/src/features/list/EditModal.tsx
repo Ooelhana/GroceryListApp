@@ -14,10 +14,15 @@ import { GroceryItem } from "../../interfaces/groceryitems";
 interface EditModalProps {
   isOpen: boolean;
   setIsOpen: (arg0: boolean) => void;
+  selectedItem: GroceryItem;
 }
 
 // Modal for adding a new item to the list
-export default function AddModal({ isOpen, setIsOpen }: EditModalProps) {
+export default function AddModal({
+  isOpen,
+  setIsOpen,
+  selectedItem,
+}: EditModalProps) {
   //   Item data
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -26,8 +31,8 @@ export default function AddModal({ isOpen, setIsOpen }: EditModalProps) {
   const [quantityError, setQuantityError] = useState(false);
 
   useEffect(() => {
-    setName("");
-    setQuantity("");
+    setName(selectedItem.name);
+    setQuantity(selectedItem.quantity.toString());
     setNameError(false);
     setQuantityError(false);
   }, [isOpen]);
@@ -63,16 +68,18 @@ export default function AddModal({ isOpen, setIsOpen }: EditModalProps) {
   function handleSubmit() {
     if (!name) {
       setNameError(true);
+      return;
     }
     if (!quantity) {
       setQuantityError(true);
+      return;
     }
 
     const groceryItem: GroceryItem = {
       id: 1,
-      name: "",
-      quantity: 0,
-      is_purchased: false,
+      name: name,
+      quantity: parseInt(quantity),
+      is_purchased: selectedItem.is_purchased,
     };
     editItem(groceryItem);
     setIsOpen(false);
@@ -80,11 +87,10 @@ export default function AddModal({ isOpen, setIsOpen }: EditModalProps) {
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>Add Item</DialogTitle>
+      <DialogTitle>Edit Item</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          To add a new grocery item, please enter the name and quantity of the
-          item here.
+          Edit the item details and click "Edit" to save the changes.
         </DialogContentText>
         <TextField
           autoFocus
@@ -121,7 +127,7 @@ export default function AddModal({ isOpen, setIsOpen }: EditModalProps) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Add</Button>
+        <Button onClick={handleSubmit}>Edit</Button>
       </DialogActions>
     </Dialog>
   );

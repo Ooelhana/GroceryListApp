@@ -12,7 +12,6 @@ import { useState } from "react";
 import { deleteItem, editItem } from "../../api/listApi";
 import { useAppDispatch } from "../../app/hooks";
 import { GroceryItem } from "../../interfaces/groceryitems";
-import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
 import "./GroceryList.css";
 import { setItems } from "./grocerySlice";
@@ -25,7 +24,9 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
   const dispatch = useAppDispatch();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(-1);
+  const [selectedItem, setSelectedItem] = useState<GroceryItem | undefined>(
+    undefined
+  );
 
   // Handle check
   function handleCheck(id: number) {
@@ -52,8 +53,8 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
   }
 
   // Open Edit Modal
-  function handleEdit(id: number) {
-    setSelectedItem(id);
+  function handleEdit(item: GroceryItem) {
+    setSelectedItem(item);
     setIsEditOpen(true);
   }
 
@@ -99,7 +100,7 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={(e) => handleEdit(item.id)}
+                      onClick={(e) => handleEdit(item)}
                     >
                       Edit
                     </Button>
@@ -119,11 +120,13 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
           </Table>
         </TableContainer>
       </div>
-      <EditModal
-        isEditOpen={isEditOpen}
-        setIsEditOpen={setIsEditOpen}
-        selectedItem={selectedItem}
-      />
+      {selectedItem && (
+        <EditModal
+          isOpen={isEditOpen}
+          setIsOpen={setIsEditOpen}
+          selectedItem={selectedItem}
+        />
+      )}
     </>
   );
 }

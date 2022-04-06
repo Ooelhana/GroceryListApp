@@ -62,9 +62,11 @@ export default function AddModal({ isOpen, setIsOpen }: AddModalProps) {
   function handleSubmit() {
     if (!name) {
       setNameError(true);
+      return;
     }
     if (!quantity) {
       setQuantityError(true);
+      return;
     }
 
     addItem(name, parseInt(quantity));
