@@ -7,13 +7,13 @@ const url = `http://localhost:8000/groceryitems/`;
 // Get all items
 export function getItems() {
   fetch(url).then((response) => {
-    //   Success response
+    // Success response
     if (response.status === 200) {
       response.json().then((data) => {
         store.dispatch(setItems(data));
       });
     }
-    //   Error
+    // Error Response
     else {
     }
   });

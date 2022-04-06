@@ -24,6 +24,7 @@ export default function AddModal({ isOpen, setIsOpen }: AddModalProps) {
   const [nameError, setNameError] = useState(false);
   const [quantityError, setQuantityError] = useState(false);
 
+  // Form initialization
   useEffect(() => {
     setName("");
     setQuantity("");
@@ -35,7 +36,9 @@ export default function AddModal({ isOpen, setIsOpen }: AddModalProps) {
   function handleNameChange(
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
+    // Remove error message
     if (nameError) setNameError(false);
+
     setName(e.target.value);
   }
 
@@ -43,7 +46,10 @@ export default function AddModal({ isOpen, setIsOpen }: AddModalProps) {
   function handleQuantityChange(
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
+    // Remove error message
     if (quantityError) setQuantityError(false);
+
+    // Only allow integers
     if (e.target.value.includes(".")) {
       return;
     }
@@ -60,22 +66,23 @@ export default function AddModal({ isOpen, setIsOpen }: AddModalProps) {
 
   // Submit the new item
   function handleSubmit() {
+    // Input validation
     if (!name) {
       setNameError(true);
-      return;
     }
     if (!quantity) {
       setQuantityError(true);
-      return;
     }
-
-    addItem(name, parseInt(quantity));
-    setIsOpen(false);
+    if (name && quantity) {
+      // Api post and modal close
+      addItem(name, parseInt(quantity));
+      setIsOpen(false);
+    }
   }
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>Add Item</DialogTitle>
+      <DialogTitle data-testid="add-modal-title">Add Item</DialogTitle>
       <DialogContent>
         <DialogContentText>
           To add a new grocery item, please enter the name and quantity of the
@@ -87,9 +94,7 @@ export default function AddModal({ isOpen, setIsOpen }: AddModalProps) {
           helperText={nameError ? "Please fill out the name." : ""}
           margin="dense"
           id="name"
-          inputProps={{
-            "data-testid": "name-field",
-          }}
+          data-testid="name-field"
           label="Name"
           type="text"
           fullWidth
@@ -103,9 +108,7 @@ export default function AddModal({ isOpen, setIsOpen }: AddModalProps) {
           helperText={quantityError ? "Please fill out the quantity." : ""}
           margin="dense"
           id="quantity"
-          inputProps={{
-            "data-testid": "quantity-field",
-          }}
+          data-testid="quantity-field"
           label="Quantity"
           type="number"
           fullWidth
@@ -115,8 +118,12 @@ export default function AddModal({ isOpen, setIsOpen }: AddModalProps) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Add</Button>
+        <Button data-testid="add-modal-cancel" onClick={handleClose}>
+          Cancel
+        </Button>
+        <Button data-testid="add-modal-submit" onClick={handleSubmit}>
+          Add
+        </Button>
       </DialogActions>
     </Dialog>
   );

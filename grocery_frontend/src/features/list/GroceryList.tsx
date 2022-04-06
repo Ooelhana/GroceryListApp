@@ -20,9 +20,11 @@ interface GroceryListProps {
   groceryItems: GroceryItem[];
 }
 
+// Renders a list of grocery items
 export default function GroceryList({ groceryItems }: GroceryListProps) {
   const dispatch = useAppDispatch();
 
+  // Edit modal state
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<GroceryItem | undefined>(
     undefined
@@ -58,7 +60,7 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
     setIsEditOpen(true);
   }
 
-  // Open Delete Modal
+  // Make API delete call on selected item
   function handleDelete(id: number) {
     deleteItem(id);
   }
@@ -92,12 +94,14 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
                   </TableCell>
                   <TableCell component="th" scope="row">
                     <Checkbox
+                      data-testid={`checkbox-${item.id}`}
                       checked={item.is_purchased}
                       onChange={(e) => handleCheck(item.id)}
                     />
                   </TableCell>
                   <TableCell>
                     <Button
+                      data-testid={`edit-button-${item.id}`}
                       variant="outlined"
                       color="primary"
                       onClick={(e) => handleEdit(item)}
@@ -107,6 +111,7 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
                   </TableCell>
                   <TableCell>
                     <Button
+                      data-testid={`delete-button-${item.id}`}
                       variant="contained"
                       color="error"
                       onClick={(e) => handleDelete(item.id)}

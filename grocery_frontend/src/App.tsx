@@ -5,7 +5,6 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import Header from "./features/header/Header";
 import GroceryList from "./features/list/GroceryList";
-import { GroceryItem } from "./interfaces/groceryitems";
 import AddItem from "./features/add-item/AddItem";
 import { useAppSelector } from "./app/hooks";
 import { useEffect } from "react";
@@ -15,6 +14,7 @@ import { getItems } from "./api/listApi";
 function App() {
   // Get items from db on app load
   useEffect(() => {
+    document.title = "Grocery List";
     getItems();
   }, []);
 

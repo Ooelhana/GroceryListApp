@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { addItem, editItem } from "../../api/listApi";
+import { editItem } from "../../api/listApi";
 import { GroceryItem } from "../../interfaces/groceryitems";
 
 interface EditModalProps {
@@ -18,7 +18,7 @@ interface EditModalProps {
 }
 
 // Modal for adding a new item to the list
-export default function AddModal({
+export default function EditModal({
   isOpen,
   setIsOpen,
   selectedItem,
@@ -30,26 +30,32 @@ export default function AddModal({
   const [nameError, setNameError] = useState(false);
   const [quantityError, setQuantityError] = useState(false);
 
+  // Initialize default values
   useEffect(() => {
     setName(selectedItem.name);
     setQuantity(selectedItem.quantity.toString());
     setNameError(false);
     setQuantityError(false);
-  }, [isOpen]);
+  }, [isOpen, selectedItem]);
 
-  //   Update name value
+  // Update name value
   function handleNameChange(
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
+    //  Remove error message
     if (nameError) setNameError(false);
+
     setName(e.target.value);
   }
 
-  //   Handle quantity value
+  // Handle quantity value
   function handleQuantityChange(
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
+    // Remove error message
     if (quantityError) setQuantityError(false);
+
+    // Filter all non integers
     if (e.target.value.includes(".")) {
       return;
     }
@@ -66,28 +72,30 @@ export default function AddModal({
 
   // Submit the new item
   function handleSubmit() {
+    // Do input validation
     if (!name) {
       setNameError(true);
-      return;
     }
     if (!quantity) {
       setQuantityError(true);
-      return;
     }
 
-    const groceryItem: GroceryItem = {
-      id: 1,
-      name: name,
-      quantity: parseInt(quantity),
-      is_purchased: selectedItem.is_purchased,
-    };
-    editItem(groceryItem);
-    setIsOpen(false);
+    // Make api PUT call
+    if (name && quantity) {
+      const groceryItem: GroceryItem = {
+        id: selectedItem.id,
+        name: name,
+        quantity: parseInt(quantity),
+        is_purchased: selectedItem.is_purchased,
+      };
+      editItem(groceryItem);
+      setIsOpen(false);
+    }
   }
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>Edit Item</DialogTitle>
+      <DialogTitle data-testid="edit-modal-title">Edit Item</DialogTitle>
       <DialogContent>
         <DialogContentText>
           Edit the item details and click "Edit" to save the changes.
@@ -98,9 +106,7 @@ export default function AddModal({
           helperText={nameError ? "Please fill out the name." : ""}
           margin="dense"
           id="name"
-          inputProps={{
-            "data-testid": "name-field",
-          }}
+          data-testid="name-field"
           label="Name"
           type="text"
           fullWidth
@@ -114,9 +120,7 @@ export default function AddModal({
           helperText={quantityError ? "Please fill out the quantity." : ""}
           margin="dense"
           id="quantity"
-          inputProps={{
-            "data-testid": "quantity-field",
-          }}
+          data-testid="quantity-field"
           label="Quantity"
           type="number"
           fullWidth
@@ -126,8 +130,12 @@ export default function AddModal({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Edit</Button>
+        <Button data-testid={"edit-modal-cancel"} onClick={handleClose}>
+          Cancel
+        </Button>
+        <Button data-testid={"edit-modal-submit"} onClick={handleSubmit}>
+          Edit
+        </Button>
       </DialogActions>
     </Dialog>
   );

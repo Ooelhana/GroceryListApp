@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GroceryItem } from "../../interfaces/groceryitems";
 
-interface GroceryState {
+export interface GroceryState {
   items: GroceryItem[];
 }
 

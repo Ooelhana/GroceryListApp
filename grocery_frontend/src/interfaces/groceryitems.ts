@@ -1,3 +1,4 @@
+// Interface for grocery item model
 export interface GroceryItem {
   id: number;
   name: string;

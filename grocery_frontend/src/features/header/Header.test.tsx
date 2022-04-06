@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import Header from "./Header";
 
 test("renders grocery list header", () => {
-  const { getByText } = render(<Header />);
+  const { getByTestId } = render(<Header />);
 
-  expect(getByText("Grocery List")).toBeInTheDocument();
+  expect(getByTestId("app-title")).toBeInTheDocument();
 });
