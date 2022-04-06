@@ -30,10 +30,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
-  # frontend:
-  #   container_name: grocery_frontend
-  #   build:
-  #     context: ./grocery_frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "80:80"
+  frontend:
+    container_name: grocery_frontend
+    build:
+      context: ./grocery_frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
