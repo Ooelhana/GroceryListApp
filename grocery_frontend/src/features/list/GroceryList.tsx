@@ -9,22 +9,47 @@ import {
   TableRow,
 } from "@mui/material";
 import { useState } from "react";
+import { deleteItem, editItem } from "../../api/listApi";
+import { useAppDispatch } from "../../app/hooks";
 import { GroceryItem } from "../../interfaces/groceryitems";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
 import "./GroceryList.css";
+import { setItems } from "./grocerySlice";
 
 interface GroceryListProps {
   groceryItems: GroceryItem[];
 }
 
 export default function GroceryList({ groceryItems }: GroceryListProps) {
+  const dispatch = useAppDispatch();
+
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(-1);
 
   // Handle check
-  function handleCheck(id: number) {}
+  function handleCheck(id: number) {
+    let groceryItem: GroceryItem | undefined = undefined;
+
+    // Update data locally so change appears instant
+    const updatedItems = groceryItems.map((item) => {
+      if (item.id === id) {
+        groceryItem = {
+          ...item,
+          is_purchased: !item.is_purchased,
+        };
+        return groceryItem;
+      } else {
+        return item;
+      }
+    });
+    dispatch(setItems(updatedItems));
+
+    // Send API request
+    if (groceryItem) {
+      editItem(groceryItem);
+    }
+  }
 
   // Open Edit Modal
   function handleEdit(id: number) {
@@ -34,8 +59,7 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
 
   // Open Delete Modal
   function handleDelete(id: number) {
-    setSelectedItem(id);
-    setIsDeleteOpen(true);
+    deleteItem(id);
   }
 
   return (
@@ -66,7 +90,10 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
                     {item.quantity}
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    <Checkbox checked={item.is_purchased} />
+                    <Checkbox
+                      checked={item.is_purchased}
+                      onChange={(e) => handleCheck(item.id)}
+                    />
                   </TableCell>
                   <TableCell>
                     <Button
@@ -95,11 +122,6 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
       <EditModal
         isEditOpen={isEditOpen}
         setIsEditOpen={setIsEditOpen}
-        selectedItem={selectedItem}
-      />
-      <DeleteModal
-        isDeleteOpen={isDeleteOpen}
-        setIsDeleteOpen={setIsDeleteOpen}
         selectedItem={selectedItem}
       />
     </>

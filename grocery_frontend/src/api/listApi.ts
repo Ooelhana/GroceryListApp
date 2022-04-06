@@ -47,9 +47,10 @@ export function editItem(groceryItem: GroceryItem) {
   const jsonBody = {
     name: groceryItem.name,
     quantity: groceryItem.quantity,
-    flipIsPurchased: groceryItem.is_purchased,
+    is_purchased: groceryItem.is_purchased,
   };
-  fetch(`url${groceryItem.id}`, {
+
+  fetch(`${url}${groceryItem.id}/`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -68,7 +69,7 @@ export function editItem(groceryItem: GroceryItem) {
 
 // Delete item
 export function deleteItem(id: number) {
-  fetch(`url${id}`, {
+  fetch(`${url}${id}/`, {
     method: "DELETE",
   }).then((response) => {
     // Success response

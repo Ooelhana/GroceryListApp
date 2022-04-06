@@ -8,6 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
+import { addItem } from "../../api/listApi";
 
 interface AddModalProps {
   isOpen: boolean;
@@ -65,6 +66,9 @@ export default function AddModal({ isOpen, setIsOpen }: AddModalProps) {
     if (!quantity) {
       setQuantityError(true);
     }
+
+    addItem(name, parseInt(quantity));
+    setIsOpen(false);
   }
 
   return (
