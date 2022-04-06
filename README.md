@@ -45,14 +45,17 @@ The application is bundled and deployed using Docker containers which are manage
 ## Future Enhancements
 
 **Testing**
+
 The frontend test coverage could be increased to account for more edge cases and end-to-end testing should be added using a webdriver such as Selenium to test the functionality of all of the individual parts of the application together.
 
 **Authentication System**
+
 Currently, there is only a single grocery list shared by all users of the application. Adding a login system would allow different users to login and manage their individual grocery lists while keeping their data safe from other users.
 
 In addition, security could be improved by properly setting up CORS headers on the server to only allow requests to be received from the frontend application.
 
 **Scalability**
+
 As mentioned earlier, in order to properly implement scalability an account system would need to be implemented first to allow multiple users to store their list in the same database.
 
 Then we would be able to scale the application using a distributed architecture. Since the frontend is just serving static files, these servers could easily be scaled to meet demand by using a load balancer and increasing the number of servers that are serving the files. Alternatively and more simply, we could use a serverless file hosting service using a cloud service that will automatically scale as needed such as AWS S3.
@@ -62,4 +65,5 @@ Since the backend server is using a RESTful architecture, it is also very easy t
 Finally the database can be scaled by implementing database sharding. This database should be fairly easy to partition effectively because users would only be able to access the grocery items that are associated with their account. So we could increase the number of databases and shard based on a hash of the account IDs.
 
 **User Interface**
+
 While the application is relatively user-friendly and straightforward to understand, it could certainly use some colour and design to improve the user experience.
