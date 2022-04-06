@@ -7,26 +7,23 @@ import Header from "./features/header/Header";
 import GroceryList from "./features/list/GroceryList";
 import { GroceryItem } from "./interfaces/groceryitems";
 import AddItem from "./features/add-item/AddItem";
+import { useAppSelector } from "./app/hooks";
+import { useEffect } from "react";
+import { getItems } from "./api/listApi";
 
+// Grocery list application
 function App() {
-  const test: GroceryItem[] = [
-    {
-      id: 1,
-      name: "Potato Chips",
-      quantity: 3,
-      is_purchased: false,
-    },
-    {
-      id: 2,
-      name: "Pumpkin Pie",
-      quantity: 2,
-      is_purchased: true,
-    },
-  ];
+  // Get items from db on app load
+  useEffect(() => {
+    getItems();
+  }, []);
+
+  const items = useAppSelector((state) => state.grocery.items);
+
   return (
     <div className="page">
       <Header />
-      <GroceryList groceryItems={test} />
+      <GroceryList groceryItems={items} />
       <AddItem />
     </div>
   );
