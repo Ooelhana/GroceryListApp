@@ -8,10 +8,16 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   backend:
     container_name: grocery_backend
-    command: bash -c "python manage.py migrate &&
-                      python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
     build:
       context: ./grocery_backend/
       dockerfile: Dockerfile
@@ -22,7 +28,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   frontend:
     container_name: grocery_frontend
     build:
