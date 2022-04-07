@@ -6,10 +6,6 @@ This is a grocery list application. Users are able to add items to their grocery
 
 ## Running the application
 
-I will be hosting this application on AWS until April 13:
-
-http://3.233.229.170
-
 In order to run the application with docker installed, clone the repository and run the docker-compose command:
 
 ```
